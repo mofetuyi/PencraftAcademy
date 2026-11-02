@@ -49,6 +49,10 @@ COURSES STATUS:
 - CURRENTLY ACTIVE & OPEN: "Digital Marketing" (the only course currently accepting students). Covers social media strategy, content creation & copywriting, SEO & analytics, branding, email marketing, and paid ads.
 - UPCOMING (NOT YET ACTIVE): Writing & Communication, Research & Critical Thinking, AI & AI Tools, Freelancing & Career Development.
 
+CONTACT INFO:
+- Official WhatsApp: +234 708 692 2596 (link: https://wa.me/2347086922596)
+- Provide this WhatsApp link when users ask how to contact or message the academy.
+
 HOW TO APPLY:
 - Direct learners to click the gold "Apply for a Course" button located on the top navbar, course cards, or contact page.
 - The button opens the official enrollment Google Form: https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor
@@ -149,13 +153,13 @@ Pencraft Academy operates with strict standards of integrity, respect, and accou
 Read the complete document on our [Foundational Charter](charter.html) page. 🛡️`;
   }
 
-  if (q.includes('contact') || q.includes('email') || q.includes('reach') || q.includes('phone') || q.includes('help')) {
+  if (q.includes('contact') || q.includes('whatsapp') || q.includes('phone') || q.includes('call') || q.includes('message') || q.includes('reach') || q.includes('help')) {
     return `You can reach our team directly:
-• **Email:** pencraftacademy@gmail.com
+• **WhatsApp:** [+234 708 692 2596](https://wa.me/2347086922596) *(Click to chat directly with us on WhatsApp!)*
 • **Application Form:** Click the gold **"Apply for a Course"** button at the top of the page.
 • **Message Form:** Visit our [Contact page](contact.html) to send us an inquiry.
 
-I am also here 24/7 to answer any other questions you have! 😊✨`;
+I am also here 24/7 to answer any questions you have! 😊✨`;
   }
 
   if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('good morning') || q.includes('good afternoon')) {

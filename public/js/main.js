@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // Since there's no backend email service yet, show a friendly message
-      showToast('Thank you for your message! We will get back to you soon. 📧', 'success');
+      // Form submission feedback
+      showToast('Thank you! You can also chat directly with us on WhatsApp at +234 708 692 2596 💬', 'success');
       contactForm.reset();
     });
   }
