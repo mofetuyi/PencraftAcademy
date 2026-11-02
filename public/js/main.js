@@ -22,34 +22,40 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Navbar scroll effect ---
   const navbar = document.getElementById('navbar');
   const navLinks = document.querySelectorAll('.nav-link');
-  const sections = document.querySelectorAll('.section, .hero');
+  const sections = document.querySelectorAll('.section[id], .hero[id]');
 
   function handleScroll() {
     const scrollY = window.scrollY;
 
     // Navbar background
-    if (scrollY > 50) {
+    if (scrollY > 40) {
       navbar.classList.add('scrolled');
-    } else {
+    } else if (!document.querySelector('.page-hero')) {
       navbar.classList.remove('scrolled');
     }
 
-    // Active section highlighting
-    let current = '';
-    sections.forEach(section => {
-      const sectionTop = section.offsetTop - 120;
-      const sectionHeight = section.offsetHeight;
-      if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
-        current = section.getAttribute('id');
-      }
-    });
+    // Only update on single-page hash targets if on home page with sections
+    if (sections.length > 2 && window.location.pathname.endsWith('index.html') || window.location.pathname === '/') {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 140;
+        const sectionHeight = section.offsetHeight;
+        if (scrollY >= sectionTop && scrollY < sectionTop + sectionHeight) {
+          current = section.getAttribute('id');
+        }
+      });
 
-    navLinks.forEach(link => {
-      link.classList.remove('active');
-      if (link.getAttribute('href') === `#${current}`) {
-        link.classList.add('active');
+      if (current) {
+        navLinks.forEach(link => {
+          if (link.getAttribute('href').startsWith('#')) {
+            link.classList.remove('active');
+            if (link.getAttribute('href') === `#${current}`) {
+              link.classList.add('active');
+            }
+          }
+        });
       }
-    });
+    }
   }
 
   window.addEventListener('scroll', handleScroll, { passive: true });

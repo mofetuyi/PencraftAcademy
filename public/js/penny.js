@@ -1,6 +1,6 @@
 /* ================================================================
    PENCRAFT ACADEMY — Penny AI Chatbot
-   Integrates with the backend Gemini API proxy
+   Multi-tier backend proxy integration + smart markdown renderer
    ================================================================ */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,38 +13,44 @@ document.addEventListener('DOMContentLoaded', () => {
   const suggestions = document.querySelectorAll('.penny-suggestion');
 
   // Session ID for conversation continuity
-  const sessionId = 'penny_' + Math.random().toString(36).substring(2, 15) + Date.now().toString(36);
+  const sessionId = 'penny_' + Math.random().toString(36).substring(2, 12) + Date.now().toString(36);
 
   let isOpen = false;
   let isWaiting = false;
 
   // --- Toggle chat ---
-  chatToggle.addEventListener('click', () => {
-    isOpen = !isOpen;
-    chatWidget.classList.toggle('open', isOpen);
-    chatToggle.classList.toggle('active', isOpen);
+  if (chatToggle && chatWidget) {
+    chatToggle.addEventListener('click', () => {
+      isOpen = !isOpen;
+      chatWidget.classList.toggle('open', isOpen);
+      chatToggle.classList.toggle('active', isOpen);
 
-    if (isOpen) {
-      chatInput.focus();
-      // Hide notification dot
-      document.getElementById('pennyNotification').style.display = 'none';
-    }
-  });
+      if (isOpen) {
+        chatInput.focus();
+        const notif = document.getElementById('pennyNotification');
+        if (notif) notif.style.display = 'none';
+      }
+    });
+  }
 
   // --- Minimize chat ---
-  chatMinimize.addEventListener('click', () => {
-    isOpen = false;
-    chatWidget.classList.remove('open');
-    chatToggle.classList.remove('active');
-  });
+  if (chatMinimize && chatWidget) {
+    chatMinimize.addEventListener('click', () => {
+      isOpen = false;
+      chatWidget.classList.remove('open');
+      if (chatToggle) chatToggle.classList.remove('active');
+    });
+  }
 
   // --- Send message ---
-  chatForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const message = chatInput.value.trim();
-    if (!message || isWaiting) return;
-    sendMessage(message);
-  });
+  if (chatForm && chatInput) {
+    chatForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = chatInput.value.trim();
+      if (!message || isWaiting) return;
+      sendMessage(message);
+    });
+  }
 
   // --- Quick suggestions ---
   suggestions.forEach(btn => {
@@ -57,16 +63,15 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   async function sendMessage(message) {
-    // Add user message
     appendMessage(message, 'user');
     chatInput.value = '';
     isWaiting = true;
 
-    // Hide suggestions after first message
+    // Hide suggestions after interaction
     const suggestionsContainer = document.getElementById('pennySuggestions');
-    suggestionsContainer.style.display = 'none';
+    if (suggestionsContainer) suggestionsContainer.style.display = 'none';
 
-    // Show typing indicator
+    // Typing indicator
     const typingEl = showTyping();
 
     try {
@@ -77,19 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       const data = await response.json();
-
-      // Remove typing indicator
       removeTyping(typingEl);
 
-      if (data.error) {
+      if (data && data.reply) {
+        appendMessage(data.reply, 'bot');
+      } else if (data && data.error) {
         appendMessage(data.error, 'bot');
       } else {
-        appendMessage(data.reply, 'bot');
+        appendMessage("I'm here to assist you with Pencraft Academy! Could you please repeat that?", 'bot');
       }
     } catch (error) {
+      console.warn('Penny fetch error:', error);
       removeTyping(typingEl);
       appendMessage(
-        "Sorry, I'm having trouble connecting right now. Please try again in a moment! 💫",
+        "I'm here! You can explore our [Courses](courses.html) or [Apply Directly](https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor). How else can I help?",
         'bot'
       );
     }
@@ -108,35 +114,36 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const contentDiv = document.createElement('div');
     contentDiv.className = 'penny-msg-content';
-
-    // Parse markdown-like formatting
     contentDiv.innerHTML = formatResponse(text);
 
     msgDiv.appendChild(avatarDiv);
     msgDiv.appendChild(contentDiv);
     chatMessages.appendChild(msgDiv);
-
-    // Scroll to bottom
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
 
   function formatResponse(text) {
-    // Convert markdown-like text to HTML
+    if (!text) return '';
+
     let html = text
       // Bold
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       // Italic
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
-      // Line breaks
-      .replace(/\n/g, '<br>')
+      // Markdown links: [Text](url)
+      .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: var(--gold-600); font-weight: 600; text-decoration: underline;">$1</a>')
       // Bullet points
-      .replace(/^[-•]\s+(.+)/gm, '<li>$1</li>');
+      .replace(/^[\s]*[•\-\*]\s+(.+)/gm, '<li>$1</li>')
+      // Numbered lists
+      .replace(/^[\s]*([0-9]+)\.\s+(.+)/gm, '<li><strong>$1.</strong> $2</li>')
+      // Line breaks
+      .replace(/\n\n+/g, '</p><p>')
+      .replace(/\n/g, '<br>');
 
-    // Wrap consecutive <li> elements in <ul>
-    html = html.replace(/((<li>.*?<\/li>\s*)+)/g, '<ul>$1</ul>');
+    // Wrap consecutive list items
+    html = html.replace(/((<li>.*?<\/li>\s*)+)/g, '<ul style="margin: 0.5rem 0; padding-left: 1.25rem;">$1</ul>');
 
-    // Wrap in paragraph if no HTML tags found
-    if (!html.includes('<')) {
+    if (!html.startsWith('<p>') && !html.startsWith('<ul>')) {
       html = `<p>${html}</p>`;
     }
 
@@ -173,19 +180,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  // --- Auto-show notification after 5 seconds ---
-  setTimeout(() => {
-    if (!isOpen) {
-      document.getElementById('pennyNotification').style.display = 'block';
-    }
-  }, 5000);
-
   // --- Keyboard shortcut: Escape to close ---
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && isOpen) {
       isOpen = false;
       chatWidget.classList.remove('open');
-      chatToggle.classList.remove('active');
+      if (chatToggle) chatToggle.classList.remove('active');
     }
   });
 });
