@@ -207,10 +207,14 @@ input, textarea { font-family: var(--font-body); font-size: 1rem; }
 }
 
 .nav-logo-img {
-  width: 42px;
-  height: 42px;
-  border-radius: 8px;
-  object-fit: cover;
+  height: 46px;
+  width: auto;
+  object-fit: contain;
+  transition: var(--transition);
+}
+
+.nav-logo:hover .nav-logo-img {
+  transform: scale(1.03);
 }
 
 .nav-logo-text {
@@ -219,6 +223,7 @@ input, textarea { font-family: var(--font-body); font-size: 1rem; }
   font-weight: 800;
   color: var(--white);
   letter-spacing: 0.5px;
+  display: none; /* Logo already contains full wordmark */
 }
 
 .nav-links {
@@ -631,23 +636,29 @@ input, textarea { font-family: var(--font-body); font-size: 1rem; }
 
 .about-img-wrapper {
   position: relative;
+  background: linear-gradient(145deg, #ffffff, #f0f4f9);
+  padding: 3rem 2.5rem;
+  border-radius: var(--radius-xl);
+  box-shadow: 0 15px 45px rgba(27, 42, 74, 0.08);
+  border: 1px solid rgba(201, 168, 76, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .about-img {
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
   width: 100%;
-  object-fit: cover;
+  max-width: 440px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 25px rgba(13, 27, 42, 0.12));
 }
 
 .about-img-accent {
   position: absolute;
-  bottom: -15px;
-  right: -15px;
-  width: 100%;
-  height: 100%;
-  border: 3px solid var(--gold-300);
-  border-radius: var(--radius-lg);
+  inset: -10px;
+  border: 2px dashed rgba(201, 168, 76, 0.35);
+  border-radius: calc(var(--radius-xl) + 10px);
   z-index: -1;
 }
 
@@ -1152,11 +1163,11 @@ input, textarea { font-family: var(--font-body); font-size: 1rem; }
 }
 
 .footer-logo {
-  width: 60px;
   height: 60px;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  object-fit: cover;
+  width: auto;
+  max-width: 240px;
+  object-fit: contain;
+  margin-bottom: 1.25rem;
 }
 
 .footer-tagline {
