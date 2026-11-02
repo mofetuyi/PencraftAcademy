@@ -44,10 +44,12 @@ TAGLINE: "Turning Ideas Into Skills. Turning Skills Into Value."
 
 FOUNDER: Osuigwe Wisdom Munachimso (Prince Noble)
 
-LEARNING AREAS:
+CURRENTLY OFFERED:
+- Digital Marketing (this is the only course currently available)
+
+COMING SOON (not yet available):
 - Writing, communication, editing, and proofreading
 - Research and critical thinking
-- Digital marketing
 - Artificial intelligence (AI) and AI tools
 - Freelancing and career development
 
