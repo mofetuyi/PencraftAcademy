@@ -4,8 +4,12 @@
   "description": "Pencraft Academy — Turning Ideas Into Skills. Turning Skills Into Value.",
   "main": "server.js",
   "scripts": {
+    "build": "echo 'No build step required'",
     "start": "node server.js",
     "dev": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   },
   "dependencies": {
     "express": "^4.21.0",
