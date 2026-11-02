@@ -102,22 +102,39 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     // Get or create conversation history
     let history = conversations.get(sessionId) || [];
 
-    const model = genAI.getGenerativeModel({
-      model: 'gemini-2.0-flash',
-      systemInstruction: PENNY_SYSTEM_PROMPT,
-    });
+    // Try primary model, fallback to lite if needed
+    const modelsToTry = ['gemini-3.8-flash', 'gemini-3.8-flash-lite', 'gemini-flash-latest'];
+    let reply = null;
+    let lastError = null;
 
-    const chat = model.startChat({
-      history: history,
-    });
+    for (const modelName of modelsToTry) {
+      try {
+        const model = genAI.getGenerativeModel({
+          model: modelName,
+          systemInstruction: PENNY_SYSTEM_PROMPT,
+        });
 
-    const result = await chat.sendMessage(message.trim());
-    const response = result.response.text();
+        const chat = model.startChat({
+          history: history,
+        });
+
+        const result = await chat.sendMessage(message.trim());
+        reply = result.response.text();
+        if (reply) break;
+      } catch (err) {
+        console.warn(`Model ${modelName} failed, trying fallback:`, err.message);
+        lastError = err;
+      }
+    }
+
+    if (!reply) {
+      throw lastError || new Error('No response from AI models');
+    }
 
     // Update history
     history.push(
       { role: 'user', parts: [{ text: message.trim() }] },
-      { role: 'model', parts: [{ text: response }] }
+      { role: 'model', parts: [{ text: reply }] }
     );
 
     // Keep last 20 exchanges to manage memory
@@ -135,7 +152,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
       }
     }
 
-    res.json({ reply: response });
+    res.json({ reply: reply });
   } catch (error) {
     console.error('Penny AI Error:', error.message);
     res.status(500).json({
