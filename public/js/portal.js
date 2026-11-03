@@ -90,12 +90,14 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       hideAlert();
 
-      const studentId = document.getElementById('studentIdInput').value.trim();
-      const fullName = document.getElementById('studentNameInput').value.trim();
+      const studentId = (document.getElementById('studentIdInput')?.value || '').trim();
+      const firstName = (document.getElementById('studentFirstNameInput')?.value || '').trim();
+      const lastName = (document.getElementById('studentLastNameInput')?.value || '').trim();
+      const fullName = `${firstName} ${lastName}`.trim();
       const submitBtn = document.getElementById('studentSubmitBtn');
 
-      if (!studentId || !fullName) {
-        showAlert('Please enter both your Student ID and your registered Full Name.');
+      if (!studentId || !firstName || !lastName) {
+        showAlert('Please enter your Student ID, First Name, and Last Name.');
         return;
       }
 
@@ -106,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const res = await fetch('/api/portal/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ studentId, fullName })
+          body: JSON.stringify({ studentId, firstName, lastName, fullName })
         });
 
         const data = await res.json();
@@ -114,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submitBtn.textContent = 'Sign In to Portal →';
 
         if (!res.ok || !data.success) {
-          showAlert(data.error || "We couldn't find you in our student records. Please check your Student ID and name, or contact the academy.");
+          showAlert(data.error || "We couldn't find you in our student records. Please check your Student ID, First Name, and Last Name, or contact the academy.");
           return;
         }
 
@@ -125,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Sign In to Portal →';
-        showAlert("We couldn't find you in our student records. Please check your Student ID and name, or contact the academy.");
+        showAlert("We couldn't find you in our student records. Please check your Student ID, First Name, and Last Name, or contact the academy.");
       }
     });
   }

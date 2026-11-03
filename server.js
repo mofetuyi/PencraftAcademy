@@ -317,28 +317,30 @@ function requireAdmin(req, res, next) {
 // --- Student Login Endpoint ---
 app.post('/api/portal/login', async (req, res) => {
   const clientIp = req.ip || req.connection.remoteAddress || 'unknown_ip';
-  const { studentId = '', fullName = '' } = req.body || {};
+  const { studentId = '', fullName = '', firstName = '', lastName = '' } = req.body || {};
 
   const cleanId = studentId.trim();
-  const cleanName = fullName.trim();
+  const cleanFirst = firstName.trim();
+  const cleanLast = lastName.trim();
+  const cleanName = (fullName.trim() || `${cleanFirst} ${cleanLast}`).trim();
 
   const rateCheck = checkRateLimit(clientIp);
   if (!rateCheck.allowed) {
     return res.status(429).json({ error: rateCheck.message });
   }
 
-  if (!cleanId || !cleanName) {
-    return res.status(400).json({ error: 'Please enter both your Student ID and your Full Name.' });
+  if (!cleanId || (!cleanName && (!cleanFirst || !cleanLast))) {
+    return res.status(400).json({ error: 'Please enter your Student ID, First Name, and Last Name.' });
   }
 
   try {
     const students = await fetchStudents();
-    const matched = findStudentMatch(students, cleanId, cleanName);
+    const matched = findStudentMatch(students, cleanId, cleanName, cleanFirst, cleanLast);
 
     if (!matched) {
       recordFailedAttempt(clientIp);
       return res.status(401).json({
-        error: "We couldn't find you in our student records. Please check your Student ID and name, or contact the academy."
+        error: "We couldn't find you in our student records. Please check your Student ID, First Name, and Last Name, or contact the academy."
       });
     }
 
