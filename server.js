@@ -75,7 +75,6 @@ WEBSITE NAVIGATION:
 - Home: index.html
 - About Us: about.html
 - Courses: courses.html
-- Foundational Charter: charter.html
 - Contact & Apply: contact.html
 
 YOUR PERSONALITY & TONE:
@@ -142,15 +141,14 @@ Our certificates reflect practical competence demonstrated through real assignme
 Learn more on our [Courses & Assessment](courses.html) page! 📜`;
   }
 
-  if (q.includes('charter') || q.includes('rule') || q.includes('discipline') || q.includes('rights') || q.includes('value')) {
-    return `📜 **Foundational Charter & Governance:**
+  if (q.includes('rule') || q.includes('discipline') || q.includes('rights') || q.includes('value')) {
+    return `📜 **Core Values & Community Standards:**
 
-Pencraft Academy operates with strict standards of integrity, respect, and accountability.
-• 9 Core Values including Integrity, Discipline, and Excellence.
-• 5-Level progressive disciplinary process designed to correct rather than punish.
-• Clear rights and protections for all students and team members.
+Pencraft Academy operates with strict standards of integrity, respect, and excellence.
+• 9 Core Values including Integrity, Discipline, Respect, and Transparency.
+• Supportive, practical learning environment focused on ethical growth.
 
-Read the complete document on our [Foundational Charter](charter.html) page. 🛡️`;
+Learn more about our standards on the [About Us](about.html) page! ✨`;
   }
 
   if (q.includes('contact') || q.includes('whatsapp') || q.includes('phone') || q.includes('call') || q.includes('message') || q.includes('reach') || q.includes('help')) {
@@ -174,7 +172,7 @@ I'm **Penny**, your AI guide. How can I help you today? You can ask me about:
 
   return `Pencraft Academy is built on practical learning: *"Turning Ideas Into Skills. Turning Skills Into Value."*
 
-We are currently enrolling students for our **Digital Marketing** course. You can apply right away by clicking the **"Apply for a Course"** button at the top of the page, or explore our [About](about.html), [Courses](courses.html), and [Charter](charter.html) pages for more details!
+We are currently enrolling students for our **Digital Marketing** course. You can apply right away by clicking the **"Apply for a Course"** button at the top of the page, or explore our [About](about.html) and [Courses](courses.html) pages for more details!
 
 How else can I assist you? ✨`;
 }
