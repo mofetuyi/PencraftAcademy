@@ -392,7 +392,7 @@ app.post('/api/portal/admin-login', (req, res) => {
     return res.status(429).json({ error: rateCheck.message });
   }
 
-  const adminPass = process.env.ADMIN_PASSWORD || 'PencraftAdmin2026!';
+  const adminPass = process.env.ADMIN_PASSWORD || 'pencraftadmin2026';
   if (password !== adminPass) {
     recordFailedAttempt(`admin_${clientIp}`);
     return res.status(401).json({ error: 'Invalid admin credentials.' });
