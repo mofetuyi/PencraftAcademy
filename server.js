@@ -278,7 +278,7 @@ const { createToken, verifyToken, checkRateLimit, recordFailedAttempt, resetFail
 const classStore = require('./lib/classStore');
 
 const ASSIGNMENT_FORM_URL = process.env.ASSIGNMENT_FORM_URL || 'https://forms.gle/1bzbqAZr9zzqfLmo9';
-const DRIVE_FOLDER_URL = process.env.DRIVE_FOLDER_URL || 'https://drive.google.com';
+const DRIVE_FOLDER_URL = (process.env.DRIVE_FOLDER_URL && !process.env.DRIVE_FOLDER_URL.includes('sample_folder_id')) ? process.env.DRIVE_FOLDER_URL : '';
 
 // Auth middleware for portal
 function authenticatePortal(req, res, next) {
