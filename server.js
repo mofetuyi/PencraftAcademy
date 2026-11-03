@@ -47,8 +47,7 @@ CORE INFORMATION ABOUT PENCRAFT ACADEMY:
 - Vision: To become a trusted skills-development academy building capable, creative, disciplined, and ethical individuals.
 
 COURSES STATUS:
-- CURRENTLY ACTIVE & OPEN: "Digital Marketing" (the only course currently accepting students). Covers social media strategy, content creation & copywriting, SEO & analytics, branding, email marketing, and paid ads.
-- UPCOMING: Writing & Communication, Research & Critical Thinking, AI & AI Tools, Freelancing & Career Development.
+- ACTIVE COURSE: "Digital Marketing" (the only course offered). Covers social media strategy, content creation & copywriting, SEO & analytics, branding, email marketing, and paid advertising.
 
 CONTACT INFO:
 - Official WhatsApp: +234 708 692 2596 (chat link: https://wa.me/2347086922596)
@@ -56,8 +55,8 @@ CONTACT INFO:
 HOW TO APPLY:
 - Direct learners to click the gold "Apply for a Course" button located on the top navbar or contact page, which links to the official enrollment form: https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor
 
-ASSESSMENT & CERTIFICATION TIERS:
-- Master (70–100%), Senior (60–69%), Intermediate (50–59%), Apprentice (40–49%), Participation (Below 40%).
+CERTIFICATION:
+- Certificate of Completion: Awarded to every student who successfully completes their course modules, practical exercises, and capstone project. There are no separate tiers; all qualifying graduates earn the official Certificate of Completion.
 
 WEBSITE NAVIGATION:
 - Home: index.html
@@ -88,18 +87,15 @@ function generateKnowledgeFallback(query) {
   }
 
   if (q.includes('course') || q.includes('teach') || q.includes('offer') || q.includes('program') || q.includes('learn') || q.includes('curriculum')) {
-    return `🎓 **Our Courses:**
+    return `🎓 **Our Program:**
 
-Currently, our active course open for enrollment is:
-• **Digital Marketing** — Master social media strategy, content marketing, SEO, copywriting, and brand building.
+We offer a comprehensive **Digital Marketing** course covering:
+• Social media management & brand growth
+• High-conversion copywriting & content creation
+• Search Engine Optimization (SEO) & analytics
+• Email marketing, funnels & paid ads
 
-*Upcoming courses in preparation:*
-• Writing, Communication & Proofreading
-• Research & Critical Thinking
-• Artificial Intelligence (AI) & AI Tools
-• Freelancing & Career Development
-
-You can view full details on our [Courses page](courses.html) or click **Apply for a Course** to get started! 🚀`;
+View full curriculum on our [Courses page](courses.html) or click **Apply for a Course** to join! 🚀`;
   }
 
   if (q.includes('founder') || q.includes('who started') || q.includes('wisdom') || q.includes('prince noble') || q.includes('owner') || q.includes('director')) {
@@ -118,17 +114,12 @@ His vision is to close the gap between individual potential and practical abilit
 Explore our story on the [About Us](about.html) page! ✨`;
   }
 
-  if (q.includes('certif') || q.includes('grade') || q.includes('score') || q.includes('master') || q.includes('pass')) {
-    return `🏆 **Assessment & Certification Levels:**
+  if (q.includes('certif') || q.includes('diploma') || q.includes('pass') || q.includes('graduate')) {
+    return `🏆 **Certificate of Completion:**
 
-Our certificates reflect practical competence demonstrated through real assignments and projects:
-• **Master:** 70–100%
-• **Senior:** 60–69%
-• **Intermediate:** 50–59%
-• **Apprentice:** 40–49%
-• **Participation:** Below 40%
+Pencraft Academy awards an official **Certificate of Completion** to every student who successfully completes all course modules, practical exercises, and the final capstone project.
 
-Learn more on our [Courses & Assessment](courses.html) page! 📜`;
+View details on our [Courses](courses.html#certification) page! 📜✨`;
   }
 
   if (q.includes('rule') || q.includes('discipline') || q.includes('rights') || q.includes('value')) {
