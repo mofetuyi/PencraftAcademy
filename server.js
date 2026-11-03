@@ -17,7 +17,8 @@ app.use(helmet({
       scriptSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "blob:"],
+      imgSrc: ["'self'", "data:", "blob:", "https://*"],
+      frameSrc: ["'self'", "https://drive.google.com", "https://docs.google.com"],
       connectSrc: ["'self'"],
     },
   },
@@ -279,6 +280,192 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
   }
 
   return res.json({ reply });
+});
+
+const { fetchStudents, findStudentMatch } = require('./lib/studentStore');
+const { createToken, verifyToken, checkRateLimit, recordFailedAttempt, resetFailedAttempts } = require('./lib/auth');
+const classStore = require('./lib/classStore');
+
+const ASSIGNMENT_FORM_URL = process.env.ASSIGNMENT_FORM_URL || 'https://forms.gle/1bzbqAZr9zzqfLmo9';
+const DRIVE_FOLDER_URL = process.env.DRIVE_FOLDER_URL || 'https://drive.google.com';
+
+// Auth middleware for portal
+function authenticatePortal(req, res, next) {
+  const authHeader = req.headers.authorization || req.headers['x-portal-token'];
+  let token = null;
+
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7).trim();
+  } else if (authHeader) {
+    token = authHeader.trim();
+  }
+
+  const payload = verifyToken(token);
+  if (!payload) {
+    return res.status(401).json({
+      error: 'Access denied. Please sign in to the student portal.',
+      authenticated: false
+    });
+  }
+
+  req.portalUser = payload;
+  next();
+}
+
+// Admin only middleware
+function requireAdmin(req, res, next) {
+  authenticatePortal(req, res, () => {
+    if (req.portalUser && req.portalUser.role === 'admin') {
+      next();
+    } else {
+      res.status(403).json({ error: 'Access restricted to administrator.' });
+    }
+  });
+}
+
+// --- Student Login Endpoint ---
+app.post('/api/portal/login', async (req, res) => {
+  const clientIp = req.ip || req.connection.remoteAddress || 'unknown_ip';
+  const { studentId = '', fullName = '' } = req.body || {};
+
+  const cleanId = studentId.trim();
+  const cleanName = fullName.trim();
+
+  const rateCheck = checkRateLimit(clientIp);
+  if (!rateCheck.allowed) {
+    return res.status(429).json({ error: rateCheck.message });
+  }
+
+  if (!cleanId || !cleanName) {
+    return res.status(400).json({ error: 'Please enter both your Student ID and your Full Name.' });
+  }
+
+  try {
+    const students = await fetchStudents();
+    const matched = findStudentMatch(students, cleanId, cleanName);
+
+    if (!matched) {
+      recordFailedAttempt(clientIp);
+      return res.status(401).json({
+        error: "We couldn't find you in our student records. Please check your Student ID and name, or contact the academy."
+      });
+    }
+
+    // Success - reset attempts
+    resetFailedAttempts(clientIp);
+
+    // Create session token (valid 7 days)
+    const displayStudentId = matched.studentId || cleanId;
+    const displayFullName = matched.fullName || cleanName;
+
+    const token = createToken({
+      studentId: displayStudentId,
+      fullName: displayFullName,
+      role: 'student',
+      exp: Date.now() + 7 * 24 * 60 * 60 * 1000
+    });
+
+    return res.json({
+      success: true,
+      token,
+      student: {
+        studentId: displayStudentId,
+        fullName: displayFullName,
+        role: 'student'
+      }
+    });
+  } catch (err) {
+    console.error('Portal login error:', err);
+    return res.status(500).json({
+      error: "We couldn't find you in our student records. Please check your Student ID and name, or contact the academy."
+    });
+  }
+});
+
+// --- Admin Login Endpoint ---
+app.post('/api/portal/admin-login', (req, res) => {
+  const clientIp = req.ip || 'unknown_ip';
+  const { password = '' } = req.body || {};
+
+  const rateCheck = checkRateLimit(`admin_${clientIp}`);
+  if (!rateCheck.allowed) {
+    return res.status(429).json({ error: rateCheck.message });
+  }
+
+  const adminPass = process.env.ADMIN_PASSWORD || 'PencraftAdmin2026!';
+  if (password !== adminPass) {
+    recordFailedAttempt(`admin_${clientIp}`);
+    return res.status(401).json({ error: 'Invalid admin credentials.' });
+  }
+
+  resetFailedAttempts(`admin_${clientIp}`);
+
+  const token = createToken({
+    role: 'admin',
+    fullName: 'Academy Administrator',
+    exp: Date.now() + 2 * 24 * 60 * 60 * 1000
+  });
+
+  return res.json({
+    success: true,
+    token,
+    user: {
+      role: 'admin',
+      fullName: 'Academy Administrator'
+    }
+  });
+});
+
+// --- Get Current Session Profile & Config ---
+app.get('/api/portal/me', authenticatePortal, (req, res) => {
+  res.json({
+    user: req.portalUser,
+    config: {
+      assignmentFormUrl: ASSIGNMENT_FORM_URL,
+      driveFolderUrl: DRIVE_FOLDER_URL
+    }
+  });
+});
+
+// --- Get Classes (Protected: Student or Admin) ---
+app.get('/api/portal/classes', authenticatePortal, (req, res) => {
+  const classes = classStore.getClasses();
+  res.json({
+    classes,
+    assignmentFormUrl: ASSIGNMENT_FORM_URL,
+    driveFolderUrl: DRIVE_FOLDER_URL
+  });
+});
+
+// --- Admin Class CRUD Endpoints ---
+app.post('/api/portal/classes', requireAdmin, (req, res) => {
+  const { title, date, driveUrl, notes } = req.body || {};
+  if (!title || !title.trim()) {
+    return res.status(400).json({ error: 'Class title is required.' });
+  }
+  const created = classStore.addClass({ title, date, driveUrl, notes });
+  res.status(201).json({ success: true, class: created });
+});
+
+app.put('/api/portal/classes/:id', requireAdmin, (req, res) => {
+  const updated = classStore.updateClass(req.params.id, req.body || {});
+  if (!updated) {
+    return res.status(404).json({ error: 'Class not found.' });
+  }
+  res.json({ success: true, class: updated });
+});
+
+app.delete('/api/portal/classes/:id', requireAdmin, (req, res) => {
+  const deleted = classStore.deleteClass(req.params.id);
+  if (!deleted) {
+    return res.status(404).json({ error: 'Class not found.' });
+  }
+  res.json({ success: true });
+});
+
+// Explicit Portal Route
+app.get('/portal', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'portal.html'));
 });
 
 // --- Health check ---
