@@ -35,7 +35,7 @@ const chatLimiter = rateLimit({
 // --- Gemini AI setup ---
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-const PENNY_SYSTEM_PROMPT = `You are Penny, the smart, warm, and helpful AI assistant for Pencraft Academy.
+const PENNY_SYSTEM_PROMPT = `You are Penny, the smart, friendly, highly capable, and encouraging AI assistant for Pencraft Academy.
 
 CORE INFORMATION ABOUT PENCRAFT ACADEMY:
 - Tagline: "Turning Ideas Into Skills. Turning Skills Into Value."
@@ -47,29 +47,16 @@ CORE INFORMATION ABOUT PENCRAFT ACADEMY:
 
 COURSES STATUS:
 - CURRENTLY ACTIVE & OPEN: "Digital Marketing" (the only course currently accepting students). Covers social media strategy, content creation & copywriting, SEO & analytics, branding, email marketing, and paid ads.
-- UPCOMING (NOT YET ACTIVE): Writing & Communication, Research & Critical Thinking, AI & AI Tools, Freelancing & Career Development.
+- UPCOMING: Writing & Communication, Research & Critical Thinking, AI & AI Tools, Freelancing & Career Development.
 
 CONTACT INFO:
-- Official WhatsApp: +234 708 692 2596 (link: https://wa.me/2347086922596)
-- Provide this WhatsApp link when users ask how to contact or message the academy.
+- Official WhatsApp: +234 708 692 2596 (chat link: https://wa.me/2347086922596)
 
 HOW TO APPLY:
-- Direct learners to click the gold "Apply for a Course" button located on the top navbar, course cards, or contact page.
-- The button opens the official enrollment Google Form: https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor
+- Direct learners to click the gold "Apply for a Course" button located on the top navbar or contact page, which links to the official enrollment form: https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor
 
 ASSESSMENT & CERTIFICATION TIERS:
-- Master: 70–100% (exceptional proficiency)
-- Senior: 60–69% (strong competence)
-- Intermediate: 50–59% (solid understanding)
-- Apprentice: 40–49% (developing skills)
-- Participation: Below 40%
-
-DISCIPLINARY LEVELS:
-- Level 1: Verbal caution
-- Level 2: Written warning
-- Level 3: Improvement plan / probation
-- Level 4: Temporary suspension
-- Level 5: Removal after fair review
+- Master (70–100%), Senior (60–69%), Intermediate (50–59%), Apprentice (40–49%), Participation (Below 40%).
 
 WEBSITE NAVIGATION:
 - Home: index.html
@@ -77,12 +64,14 @@ WEBSITE NAVIGATION:
 - Courses: courses.html
 - Contact & Apply: contact.html
 
-YOUR PERSONALITY & TONE:
-- Welcoming, encouraging, articulate, and professional.
-- Keep answers clear, structured, and easy to read with bullet points when explaining multiple items.
-- Use emojis tastefully (✨, 🎓, 📝, 💡).
-- If asked how to apply, give enthusiastic step-by-step guidance.
-- Always remain helpful, accurate, and supportive of learners' growth.`;
+UNIVERSAL KNOWLEDGE & ASSISTANCE GUIDELINES:
+- You are a full-fledged intelligent assistant. Answer ANY and ALL questions the user asks you across all topics and domains.
+- Never refuse a question or say you are only allowed to discuss the academy.
+- If asked about digital marketing, SEO, copywriting, or ads: provide actionable, in-depth, expert advice.
+- If asked about writing, editing, or grammar: provide constructive reviews, suggestions, and corrections.
+- If asked about career growth, freelancing, portfolio design, or client pitching: share proven, practical tips.
+- If asked general knowledge questions (coding, technology, history, science, math, life advice, creative brainstorming, productivity): answer accurately, helpfully, and thoroughly.
+- Tone: Warm, articulate, sharp, and empowering. Use clean markdown formatting (bolding, bullet points, numbered lists) so your answers are effortless to read.`;
 
 // Intelligent fallback in case external API has temporary high demand spikes
 function generateKnowledgeFallback(query) {
@@ -170,11 +159,51 @@ I'm **Penny**, your AI guide. How can I help you today? You can ask me about:
 • Navigation and general guidance!`;
   }
 
-  return `Pencraft Academy is built on practical learning: *"Turning Ideas Into Skills. Turning Skills Into Value."*
+  if (q.includes('seo') || q.includes('search engine')) {
+    return `🔍 **What is SEO (Search Engine Optimization)?**
 
-We are currently enrolling students for our **Digital Marketing** course. You can apply right away by clicking the **"Apply for a Course"** button at the top of the page, or explore our [About](about.html) and [Courses](courses.html) pages for more details!
+SEO is the practice of optimizing your website and content to rank higher in unpaid (organic) search engine results like Google.
 
-How else can I assist you? ✨`;
+**Key Pillars of SEO:**
+• **Keyword Research:** Discovering terms your target audience searches for.
+• **On-Page SEO:** Crafting compelling title tags, headings, content, and internal links.
+• **Technical SEO:** Fast page speed, mobile-friendliness, and clean site structure.
+• **Backlinks (Off-Page):** Earning credible links from reputable websites.
+
+Mastering SEO is a core part of our **Digital Marketing** course at Pencraft Academy! 🚀`;
+  }
+
+  if (q.includes('copywriting') || q.includes('content') || q.includes('write') || q.includes('writing')) {
+    return `✍️ **Effective Copywriting Tips:**
+
+1. **Know Your Audience:** Write directly to one person's desires and pain points.
+2. **Lead with Benefits, Not Just Features:** Don't just say what a product does—show how it transforms the user's life.
+3. **Hook in the First 3 Seconds:** Use bold headlines and curiosity-provoking openers.
+4. **Clear Call-to-Action (CTA):** Tell the reader precisely what to do next (e.g. *"Join today"*, *"Claim your guide"*).
+5. **Edit Ruthlessly:** Cut fluff, simplify complex phrasing, and keep sentences punchy.
+
+We teach actionable copywriting inside our **Digital Marketing** program! ✨`;
+  }
+
+  if (q.includes('freelance') || q.includes('client') || q.includes('portfolio') || q.includes('money')) {
+    return `💼 **Key Steps to Succeed in Freelancing:**
+
+1. **Pick One High-Income Skill:** Specialize in an in-demand area (like Digital Marketing, Copywriting, or Web Design).
+2. **Build Proof of Work:** Create 2–3 comprehensive case studies or sample projects even before having your first client.
+3. **Outreach & Networking:** Engage on LinkedIn, Twitter/X, and freelance platforms with personalized, value-first proposals.
+4. **Deliver Exceptional Quality:** Over-deliver on deadlines and maintain proactive communication.
+
+Pencraft Academy is built on turning skills into tangible market value! 🌟`;
+  }
+
+  return `Hello! I'm **Penny**, your AI assistant. ✨
+
+I can help you with anything you need—from answering questions about **Digital Marketing**, **writing**, **SEO**, and **career skills**, to guiding you through enrolling at Pencraft Academy!
+
+• To apply for our active cohort, click the **"Apply for a Course"** button.
+• To speak with our team, chat with us on WhatsApp at **[+234 708 692 2596](https://wa.me/2347086922596)**.
+
+Feel free to ask me any question! What would you like to know or learn today? 🎓`;
 }
 
 // Store conversation histories (in-memory)
