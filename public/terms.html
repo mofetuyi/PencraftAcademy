@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms & Conditions — Pencraft Academy</title>
+  <meta name="description" content="Official Terms & Conditions, Code of Conduct, Academic Integrity Standards, and Certification Policies for Pencraft Academy." />
+
+  <!-- Fonts: Montserrat, Cormorant Garamond, Caveat -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,500&family=Montserrat:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="/css/styles.css" />
+  <link rel="icon" type="image/png" href="/images/logo-dark.png" />
+
+  <style>
+    .terms-layout {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .terms-meta-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(10, 22, 40, 0.04);
+      border: 1px solid rgba(201, 168, 76, 0.3);
+      padding: 1.25rem 1.75rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 2.5rem;
+    }
+
+    .terms-meta-item {
+      font-family: var(--font-heading);
+      font-size: 0.9rem;
+      color: var(--navy-800);
+      font-weight: 600;
+    }
+
+    .terms-quick-nav {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      margin-bottom: 3rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .terms-quick-nav h4 {
+      font-family: var(--font-heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .terms-nav-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 0.75rem;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .terms-nav-list a {
+      color: var(--navy-700);
+      font-size: 0.95rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition);
+    }
+
+    .terms-nav-list a:hover {
+      color: var(--gold-600);
+      transform: translateX(4px);
+    }
+
+    .terms-card {
+      background: var(--white);
+      border: 1px solid var(--light-gray);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      margin-bottom: 2.25rem;
+      box-shadow: var(--shadow-sm);
+      scroll-margin-top: 100px;
+      transition: var(--transition);
+    }
+
+    .terms-card:hover {
+      border-color: rgba(201, 168, 76, 0.4);
+      box-shadow: var(--shadow-md);
+    }
+
+    .terms-header-badge {
+      display: inline-block;
+      background: rgba(201, 168, 76, 0.15);
+      color: var(--gold-600);
+      border: 1px solid var(--gold-400);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-family: var(--font-heading);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.75rem;
+    }
+
+    .terms-card h3 {
+      font-family: var(--font-heading);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--navy-900);
+      margin-bottom: 1.25rem;
+      line-height: 1.3;
+    }
+
+    .terms-card p {
+      font-family: var(--font-body);
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+
+    .terms-card p:last-child {
+      margin-bottom: 0;
+    }
+
+    .terms-highlight-box {
+      background: linear-gradient(135deg, rgba(201, 168, 76, 0.08), rgba(10, 22, 40, 0.03));
+      border-left: 4px solid var(--gold-400);
+      padding: 1.25rem 1.5rem;
+      border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      margin: 1.5rem 0;
+    }
+
+    .terms-highlight-box p {
+      font-size: 1.05rem;
+      color: var(--navy-900);
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
+    .terms-list {
+      margin: 1rem 0 1.25rem 1.5rem;
+      color: var(--text-secondary);
+    }
+
+    .terms-list li {
+      font-family: var(--font-body);
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 0.6rem;
+    }
+
+    .terms-list strong {
+      color: var(--navy-900);
+      font-family: var(--font-heading);
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="nav-logo" aria-label="Pencraft Academy">
+        <img src="/images/logo-light.png" alt="Pencraft Academy" class="nav-logo-img" />
+      </a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="about.html" class="nav-link">About</a></li>
+        <li><a href="courses.html" class="nav-link">Courses</a></li>
+        <li><a href="portal.html" class="nav-link">Student Portal</a></li>
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer" class="nav-cta">Apply for a Course</a>
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Page Hero -->
+  <header class="page-hero">
+    <div class="container">
+      <span class="page-hero-tag">Academic Charter & Policies</span>
+      <h1 class="page-hero-title">Terms & <span class="gold-text">Conditions</span></h1>
+      <p class="page-hero-subtitle">
+        Our binding agreement ensuring mutual respect, academic integrity, and dedicated skills growth across all Pencraft Academy programs.
+      </p>
+      <div class="breadcrumb">
+        <a href="index.html">Home</a>
+        <span class="sep">/</span>
+        <span class="current">Terms & Conditions</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Terms Content -->
+  <main class="section" style="background: var(--off-white); padding: 4rem 0 6rem;">
+    <div class="terms-layout">
+
+      <!-- Meta Bar -->
+      <div class="terms-meta-bar">
+        <div class="terms-meta-item">
+          📅 Effective Date: <strong>November 2026 Cohort</strong>
+        </div>
+        <div class="terms-meta-item">
+          🏛️ Institution: <strong>Pencraft Academy</strong>
+        </div>
+        <div class="terms-meta-item">
+          ✍️ Founder: <strong>Osuigwe Wisdom Munachimso</strong>
+        </div>
+      </div>
+
+      <!-- Quick Nav -->
+      <nav class="terms-quick-nav">
+        <h4>Table of Contents</h4>
+        <ul class="terms-nav-list">
+          <li><a href="#acceptance">1. Acceptance of Terms</a></li>
+          <li><a href="#admission">2. Admission & Student ID</a></li>
+          <li><a href="#conduct">3. Code of Conduct</a></li>
+          <li><a href="#integrity">4. Academic Integrity & AI</a></li>
+          <li><a href="#portal">5. Student Portal & Recordings</a></li>
+          <li><a href="#certification">6. Certificate of Completion</a></li>
+          <li><a href="#property">7. Intellectual Property</a></li>
+          <li><a href="#discipline">8. Disciplinary Procedure</a></li>
+          <li><a href="#communication">9. Communication & Support</a></li>
+          <li><a href="#amendments">10. Modifications & Updates</a></li>
+        </ul>
+      </nav>
+
+      <!-- Section 1 -->
+      <article class="terms-card" id="acceptance">
+        <span class="terms-header-badge">Article I</span>
+        <h3>1. Acceptance of Terms & Mission Statement</h3>
+        <p>
+          By applying for admission, registering for a course, accessing the Student Portal, or participating in any Pencraft Academy program, you agree to be bound by these Terms and Conditions in their entirety.
+        </p>
+        <p>
+          Pencraft Academy was founded by <strong>Osuigwe Wisdom Munachimso (Prince Noble)</strong> with a singular mission: <em>"Turning Ideas Into Skills. Turning Skills Into Value."</em> We exist to bridge the divide between theoretical understanding and real-world execution. Every student who joins our community commits to active learning, personal responsibility, and high moral integrity.
+        </p>
+        <div class="terms-highlight-box">
+          <p>
+            <strong>The Academy Pledge:</strong> "I commit to learning, growth, integrity, and service. I will respect knowledge, value discipline, take responsibility for my actions, and treat others with dignity."
+          </p>
+        </div>
+      </article>
+
+      <!-- Section 2 -->
+      <article class="terms-card" id="admission">
+        <span class="terms-header-badge">Article II</span>
+        <h3>2. Admission, Enrollment & Student ID</h3>
+        <p>
+          Admission into Pencraft Academy programs (such as our active <strong>Digital Marketing</strong> cohort) is granted upon review of your application form and confirmation by academy faculty.
+        </p>
+        <ul class="terms-list">
+          <li><strong>Student ID Issuance:</strong> Each admitted student is assigned a unique, official Student ID (formatted as <code>PEN-2026-XXXX</code>) verified against our official student registry.</li>
+          <li><strong>Non-Transferability:</strong> Your Student ID is personal to you. You may not sell, lend, share, or transfer your Student ID or portal credentials to any third party.</li>
+          <li><strong>Accurate Information:</strong> Applicants and enrolled students must provide accurate and truthful legal names, contact numbers, and email addresses during enrollment.</li>
+        </ul>
+      </article>
+
+      <!-- Section 3 -->
+      <article class="terms-card" id="conduct">
+        <span class="terms-header-badge">Article III</span>
+        <h3>3. Student Code of Conduct & Community Standards</h3>
+        <p>
+          Pencraft Academy maintains a focused, encouraging, and respectful learning environment. All students, tutors, and staff are entitled to dignity, fair treatment, and an atmosphere free from harassment.
+        </p>
+        <ul class="terms-list">
+          <li><strong>Mutual Respect:</strong> Professional courtesy must be upheld at all times across live sessions, discussion channels, WhatsApp cohort groups, and peer review sessions.</li>
+          <li><strong>Zero Tolerance for Harassment:</strong> Bullying, hate speech, discriminatory remarks, unsolicited advertising/spamming, and inappropriate personal solicitations are strictly prohibited.</li>
+          <li><strong>Punctuality & Preparation:</strong> Students are expected to attend scheduled sessions promptly, review required prep materials, and come prepared to engage meaningfully.</li>
+        </ul>
+      </article>
+
+      <!-- Section 4 -->
+      <article class="terms-card" id="integrity">
+        <span class="terms-header-badge">Article IV</span>
+        <h3>4. Academic Integrity & Ethical Technology Usage</h3>
+        <p>
+          Practical competence can only be achieved through authentic personal effort. We value honest struggle over copied perfection.
+        </p>
+        <ul class="terms-list">
+          <li><strong>Original Submissions:</strong> All homework assignments, marketing campaigns, written copy, and portfolio capstone projects submitted for evaluation must be your authentic creation.</li>
+          <li><strong>Plagiarism:</strong> Submitting another person's work, copying published materials without attribution, or having a third party complete assignments on your behalf is a severe violation.</li>
+          <li><strong>Ethical AI Usage:</strong> At Pencraft Academy, we teach students to leverage modern AI tools responsibly. AI may be utilized as a research aid, brainstorming partner, or editing assistant. However, copy-pasting raw AI outputs without comprehension, refinement, or human judgment defeats your personal growth and is not accepted as capstone work.</li>
+        </ul>
+      </article>
+
+      <!-- Section 5 -->
+      <article class="terms-card" id="portal">
+        <span class="terms-header-badge">Article V</span>
+        <h3>5. Student Portal Access & Session Recordings</h3>
+        <p>
+          The Pencraft Academy Student Portal provides enrolled students with centralized access to cohort recordings, lecture replay embeds, and assignment submission portals.
+        </p>
+        <ul class="terms-list">
+          <li><strong>Educational License:</strong> Class recordings, slides, templates, and frameworks provided through the portal are licensed exclusively for your personal educational use as an active student.</li>
+          <li><strong>Redistribution Prohibited:</strong> You may not record, redistribute, publish, sell, upload to public torrents or video-sharing sites, or broadcast academy sessions to external audiences without express written authorization from the academy leadership.</li>
+          <li><strong>Portal Security:</strong> You are responsible for safeguarding your session access. If you suspect unauthorized access using your Student ID, notify the academy administrator immediately.</li>
+        </ul>
+      </article>
+
+      <!-- Section 6 -->
+      <article class="terms-card" id="certification">
+        <span class="terms-header-badge">Article VI</span>
+        <h3>6. Assessment & Certificate of Completion</h3>
+        <p>
+          To protect the professional credibility and market value of Pencraft Academy credentials, certificates are earned through demonstrable competence rather than purchased through mere attendance.
+        </p>
+        <ul class="terms-list">
+          <li><strong>Single Credential:</strong> Successful graduates are awarded the official <strong>Pencraft Academy Certificate of Completion</strong>.</li>
+          <li><strong>Graduation Criteria:</strong> To qualify for the Certificate of Completion, a student must:
+            <ol style="margin-top: 0.5rem; margin-left: 1.5rem; line-height: 1.8;">
+              <li>Participate in cohort sessions and practical exercises.</li>
+              <li>Submit all required modular assignments via the official submission portal.</li>
+              <li>Successfully deliver an approved capstone portfolio campaign that satisfies faculty review standards.</li>
+            </ol>
+          </li>
+          <li><strong>No Passive Certificates:</strong> Registering or attending sessions without submitting assignments and fulfilling assessment requirements does not entitle an individual to certification.</li>
+        </ul>
+      </article>
+
+      <!-- Section 7 -->
+      <article class="terms-card" id="property">
+        <span class="terms-header-badge">Article VII</span>
+        <h3>7. Intellectual Property & Portfolio Ownership</h3>
+        <p>
+          We believe in clear, fair boundaries regarding intellectual property:
+        </p>
+        <ul class="terms-list">
+          <li><strong>Academy Content:</strong> Pencraft Academy retains all rights, title, and intellectual property in our brand name, trademarks, logos, curriculum design, syllabi, training frameworks, and instructor recordings.</li>
+          <li><strong>Student Ownership:</strong> You retain complete ownership of the original marketing campaigns, creative copy, brand decks, and portfolios you produce during the course. Pencraft Academy may, with your permission, feature exceptional graduate work as showcase case studies.</li>
+        </ul>
+      </article>
+
+      <!-- Section 8 -->
+      <article class="terms-card" id="discipline">
+        <span class="terms-header-badge">Article VIII</span>
+        <h3>8. Disciplinary Procedure & Portal Suspension</h3>
+        <p>
+          To preserve community integrity, violations of these terms, academic dishonesty, or disruptive conduct are handled through a fair, documented process:
+        </p>
+        <ol class="terms-list" style="list-style-type: decimal;">
+          <li><strong>Informal Counsel:</strong> An initial private discussion with faculty to address minor concerns or misunderstandings.</li>
+          <li><strong>Formal Warning:</strong> A written notice outlining the specific breach and the required corrective action.</li>
+          <li><strong>Suspension or Termination:</strong> Continued non-compliance, severe misconduct, intellectual property theft, or harassment will result in immediate suspension or permanent expulsion, with revocation of Student Portal access and forfeiture of certificate eligibility.</li>
+        </ol>
+      </article>
+
+      <!-- Section 9 -->
+      <article class="terms-card" id="communication">
+        <span class="terms-header-badge">Article IX</span>
+        <h3>9. Official Communication & Inquiries</h3>
+        <p>
+          To protect students from scams or unauthorized solicitations, all official academy support and inquiries are routed through verified channels:
+        </p>
+        <div class="terms-highlight-box" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;">
+          <div>
+            <p style="margin-bottom: 0.25rem;"><strong>Official WhatsApp Support:</strong></p>
+            <p style="color: var(--text-secondary); font-size: 1rem;">+234 708 692 2596 (Pencraft Academy Admissions & Faculty)</p>
+          </div>
+          <a href="https://wa.me/2347086922596" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+            Chat on WhatsApp →
+          </a>
+        </div>
+      </article>
+
+      <!-- Section 10 -->
+      <article class="terms-card" id="amendments">
+        <span class="terms-header-badge">Article X</span>
+        <h3>10. Modifications to Terms</h3>
+        <p>
+          Pencraft Academy reserves the right to revise these Terms and Conditions periodically to reflect improvements in our academic curriculum, technological infrastructure, or regulatory compliance. Any significant modifications will be communicated through the Student Portal and official cohort channels.
+        </p>
+        <p>
+          Continued enrollment and use of academy platforms following updates constitutes acceptance of the modified terms.
+        </p>
+      </article>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <img src="/images/logo-light.png" alt="Pencraft Academy" class="footer-logo" />
+          <p class="footer-tagline">Turning Ideas Into Skills.<br />Turning Skills Into Value.</p>
+        </div>
+        <div class="footer-links-col">
+          <h5 class="footer-heading">Navigation</h5>
+          <ul class="footer-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="courses.html">Courses</a></li>
+            <li><a href="portal.html">Student Portal</a></li>
+            <li><a href="contact.html">Contact & Apply</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h5 class="footer-heading">Admissions</h5>
+          <ul class="footer-links">
+            <li><a href="https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor" target="_blank" rel="noopener noreferrer">Apply for a Course</a></li>
+            <li><a href="courses.html#certification">Certificate of Completion</a></li>
+            <li><a href="terms.html">Terms & Conditions</a></li>
+            <li><a href="contact.html">WhatsApp Support</a></li>
+          </ul>
+        </div>
+        <div class="footer-links-col">
+          <h5 class="footer-heading">Academy Pledge</h5>
+          <p class="footer-pledge">
+            "I commit to learning, growth, integrity, and service. I will respect knowledge, value discipline, take responsibility for my actions, and treat others with dignity."
+          </p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Pencraft Academy. All rights reserved. &bull; <a href="terms.html" style="color: rgba(255,255,255,0.7); text-decoration: underline;">Terms & Conditions</a></p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Penny AI Chatbot -->
+  <div class="penny-chat" id="pennyChat">
+    <div class="penny-header">
+      <div class="penny-header-info">
+        <div class="penny-avatar">✨</div>
+        <div>
+          <h4 class="penny-name">Penny</h4>
+          <span class="penny-status">AI Assistant • Online</span>
+        </div>
+      </div>
+      <div class="penny-header-actions">
+        <button class="penny-minimize" id="pennyMinimize" aria-label="Minimize chat">—</button>
+      </div>
+    </div>
+    <div class="penny-messages" id="pennyMessages">
+      <div class="penny-message penny-bot">
+        <div class="penny-msg-avatar">✨</div>
+        <div class="penny-msg-content">
+          <p>Hi! I'm <strong>Penny</strong>. If you have any questions about our <strong>Terms & Conditions</strong>, the Certificate of Completion requirements, or admissions, ask me anytime! 🎓✨</p>
+        </div>
+      </div>
+    </div>
+    <div class="penny-input-area">
+      <div class="penny-suggestions" id="pennySuggestions">
+        <button class="penny-suggestion" data-msg="How do I earn the Certificate of Completion?">Certification</button>
+        <button class="penny-suggestion" data-msg="What is the student pledge?">Pledge</button>
+        <button class="penny-suggestion" data-msg="How do I contact Pencraft Academy?">WhatsApp</button>
+      </div>
+      <form class="penny-form" id="pennyForm">
+        <input type="text" class="penny-input" id="pennyInput" placeholder="Ask Penny anything..." autocomplete="off" />
+        <button type="submit" class="penny-send" id="pennySend" aria-label="Send message">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 2L11 13M22 2L15 22L11 13M22 2L2 9L11 13" />
+          </svg>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <button class="penny-toggle" id="pennyToggle" aria-label="Chat with Penny">
+    <span class="penny-toggle-icon">✨</span>
+    <span class="penny-toggle-text">Ask Penny</span>
+    <span class="penny-notification" id="pennyNotification"></span>
+  </button>
+
+  <script src="/js/main.js"></script>
+  <script src="/js/penny.js"></script>
+</body>
+</html>

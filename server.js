@@ -492,7 +492,7 @@ app.listen(PORT, () => {
   ║       🎓 PENCRAFT ACADEMY SERVER RUNNING        ║
   ║                                                  ║
   ║   Local:   http://localhost:${PORT}               ║
-  ║   Pages:   Home, About, Courses, Charter, Contact║
+  ║   Pages:   Home, About, Courses, Portal, Terms, Contact║
   ║   AI:      Penny Multi-tier Active ✨            ║
   ╚══════════════════════════════════════════════════╝
   `);
