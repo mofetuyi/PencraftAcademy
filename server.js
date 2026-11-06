@@ -86,16 +86,25 @@ function generateKnowledgeFallback(query) {
 *Currently accepting applications for our **Digital Marketing** cohort.* 📝✨`;
   }
 
-  if (q.includes('course') || q.includes('teach') || q.includes('offer') || q.includes('program') || q.includes('learn') || q.includes('curriculum')) {
-    return `🎓 **Our Program:**
+  if (q.includes('course') || q.includes('teach') || q.includes('offer') || q.includes('program') || q.includes('learn') || q.includes('curriculum') || q.includes('tracks')) {
+    return `🎓 **Pencraft Academy Curriculum Programs:**
 
-We offer a comprehensive **Digital Marketing** course covering:
-• Social media management & brand growth
-• High-conversion copywriting & content creation
-• Search Engine Optimization (SEO) & analytics
-• Email marketing, funnels & paid ads
+1. **📱 Digital Marketing Mastery (Active Cohort):**
+   Social media growth, high-conversion copywriting, SEO, email funnels, and paid advertising campaigns.
 
-View full curriculum on our [Courses page](courses.html) or click **Apply for a Course** to join! 🚀`;
+2. **✍️ Writing & Communication:**
+   Professional & business writing, copy editing, manuscript proofreading, and audience-tailored articulation.
+
+3. **🔍 Research & Critical Thinking:**
+   Investigative methodologies, evidence evaluation, logical reasoning, and analytical reporting.
+
+4. **🤖 AI & AI Tools:**
+   Prompt engineering principles, generative AI workflows, and responsible technological automation.
+
+5. **💼 Freelancing & Portfolio Development:**
+   Packaging skills into high-value services, proposal crafting, rate negotiation, and client management.
+
+Explore all tracks on our [Courses page](courses.html) or click **"Apply for a Course"** to enroll! 🚀✨`;
   }
 
   if (q.includes('founder') || q.includes('who started') || q.includes('wisdom') || q.includes('prince noble') || q.includes('owner') || q.includes('director')) {
