@@ -1819,6 +1819,43 @@ input, textarea { font-family: var(--font-body); font-size: 1rem; }
   .penny-toggle { padding: 1rem; border-radius: 50%; }
 }
 
+/* --- Spacious Unified Course Grid (Non-Squeezed) --- */
+.courses-grid-wide {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+.course-card-spacious {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1.25px solid rgba(201, 168, 76, 0.3);
+  border-radius: var(--radius-xl);
+  padding: 2.25rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  transition: var(--transition);
+}
+
+.course-card-spacious:hover {
+  transform: translateY(-4px);
+  border-color: rgba(201, 168, 76, 0.6);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+}
+
+@media (max-width: 868px) {
+  .courses-grid-wide {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .course-card-spacious {
+    padding: 1.75rem 1.5rem;
+  }
+}
+
+
 @media (max-width: 480px) {
   .values-grid { grid-template-columns: 1fr; }
   .assessment-grid { grid-template-columns: 1fr; }
