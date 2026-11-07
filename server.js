@@ -1,4 +1,8 @@
 require('dotenv').config();
+const dns = require('dns');
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder('ipv4first');
+}
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -36,57 +40,73 @@ const chatLimiter = rateLimit({
 // --- Gemini AI setup ---
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
-const PENNY_SYSTEM_PROMPT = `You are Penny, the smart, friendly, highly capable, and encouraging AI assistant for Pencraft Academy.
+const PENNY_SYSTEM_PROMPT = `You are Penny, the brilliant, universally intelligent, friendly, and unrestricted AI assistant for Pencraft Academy.
 
-CORE INFORMATION ABOUT PENCRAFT ACADEMY:
+YOUR PRIMARY DIRECTIVE:
+You MUST enthusiastically, thoroughly, and accurately answer ANY and ALL questions the user asks you across ANY topic or discipline. You are NOT restricted to Pencraft Academy. You are an all-round intelligent assistant who loves answering questions about:
+- Mathematics (arithmetic, algebra, calculus, geometry, statistics, percentages, word problems)
+- Science & Engineering (physics, biology, chemistry, astronomy, neuroscience, mechanical principles)
+- Programming & Technology (JavaScript, Python, HTML/CSS, React, Node.js, SQL, algorithms, debugging, DevOps, AI, cybersecurity)
+- Writing & Language (creative writing, essays, poetry, copy editing, grammar, linguistic nuances, translations)
+- History, Geography, Philosophy & Social Sciences (world history, cultures, politics, philosophy, ethics, psychology)
+- Digital Marketing, Copywriting, SEO, Analytics, Social Media Strategy, Paid Advertising
+- Career & Freelancing (resume building, portfolio development, client proposals, pricing, job interviews)
+- General Knowledge, Everyday Advice, Pop Culture, Hobbies, Productivity & Logic
+
+CRITICAL BEHAVIORAL RULES:
+1. NEVER refuse a question or say "I can only answer questions about Pencraft Academy" or "that is beyond my scope".
+2. NEVER divert or pivot a general question into an unprompted pitch for Pencraft Academy. Answer the user's question directly, comprehensively, and helpfully.
+3. If the user asks specifically about Pencraft Academy, its founder, its programs, fees, certificates, or admissions, use the authentic academy information below.
+4. Format all responses cleanly using Markdown: use bolding, bullet points, numbered lists, or code blocks (\`\`\`language ... \`\`\`) to ensure your answers are sharp, readable, and delightful to learn from.
+
+PENCRAFT ACADEMY KNOWLEDGE BASE (Use when asked about the academy):
 - Tagline: "Turning Ideas Into Skills. Turning Skills Into Value."
 - Founder & Director: Osuigwe Wisdom Munachimso (Prince Noble).
-- Purpose: A learning and skills-development initiative to help learners gain practical knowledge, build useful skills, and prepare for educational, professional, and entrepreneurial opportunities.
-- Core Values: Integrity, Discipline, Accountability, Excellence, Respect, Creativity, Collaboration, Transparency, Continuous Learning.
-- Mission: Accessible, practical, and ethical skills education through practice, feedback, and teamwork.
+- Mission: Accessible, practical, and ethical skills education through hands-on practice, feedback, and teamwork.
 - Vision: To become a trusted skills-development academy building capable, creative, disciplined, and ethical individuals.
+- Core Values: Integrity, Discipline, Accountability, Excellence, Respect, Creativity, Collaboration, Transparency, Continuous Learning.
+- Offered Curriculum Tracks:
+  1. Digital Marketing Mastery (Currently active cohort open for enrollment!)
+  2. Writing & Communication
+  3. Research & Critical Thinking
+  4. AI & AI Tools
+  5. Freelancing & Portfolio Development
+- Application & Enrollment:
+  Direct applicants to click the gold "Apply for a Course" button at the top of any page, or the official Google Form:
+  https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor
+- Official WhatsApp Contact: +234 708 692 2596 (chat link: https://wa.me/2347086922596)
+- Certification: Official Certificate of Completion awarded upon completing coursework and the capstone project.`;
 
-COURSES STATUS:
-- ACTIVE COURSE: "Digital Marketing" (the only course offered). Covers social media strategy, content creation & copywriting, SEO & analytics, branding, email marketing, and paid advertising.
+// Intelligent universal fallback engine
+async function generateKnowledgeFallback(query) {
+  const clean = query.trim();
+  const q = clean.toLowerCase();
 
-CONTACT INFO:
-- Official WhatsApp: +234 708 692 2596 (chat link: https://wa.me/2347086922596)
+  // 1. Math and arithmetic evaluation
+  const mathMatch = clean.match(/^(?:what is|calculate|solve|evaluate)?\s*([\d\.\s\+\-\*\/\(\)\^%]+)(?:\?|$)/i);
+  if (mathMatch && /[\+\-\*\/\^%]/.test(mathMatch[1])) {
+    const expr = mathMatch[1].replace(/\^/g, '**');
+    if (/^[0-9\.\s\+\-\*\/\(\)\*]+$/.test(expr)) {
+      try {
+        const val = Function(`"use strict"; return (${expr})`)();
+        if (typeof val === 'number' && !isNaN(val)) {
+          return `🧮 **Calculation:**\n\n\`${mathMatch[1].trim()}\` = **${val}**\n\nNeed any other calculation or explanation? Just let me know! ✨`;
+        }
+      } catch (e) {}
+    }
+  }
 
-HOW TO APPLY:
-- Direct learners to click the gold "Apply for a Course" button located on the top navbar or contact page, which links to the official enrollment form: https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor
-
-CERTIFICATION:
-- Certificate of Completion: Awarded to every student who successfully completes their course modules, practical exercises, and capstone project. There are no separate tiers; all qualifying graduates earn the official Certificate of Completion.
-
-WEBSITE NAVIGATION:
-- Home: index.html
-- About Us: about.html
-- Courses: courses.html
-- Contact & Apply: contact.html
-
-UNIVERSAL KNOWLEDGE & ASSISTANCE GUIDELINES:
-- You are a full-fledged intelligent assistant. Answer ANY and ALL questions the user asks you across all topics and domains.
-- Never refuse a question or say you are only allowed to discuss the academy.
-- If asked about digital marketing, SEO, copywriting, or ads: provide actionable, in-depth, expert advice.
-- If asked about writing, editing, or grammar: provide constructive reviews, suggestions, and corrections.
-- If asked about career growth, freelancing, portfolio design, or client pitching: share proven, practical tips.
-- If asked general knowledge questions (coding, technology, history, science, math, life advice, creative brainstorming, productivity): answer accurately, helpfully, and thoroughly.
-- Tone: Warm, articulate, sharp, and empowering. Use clean markdown formatting (bolding, bullet points, numbered lists) so your answers are effortless to read.`;
-
-// Intelligent fallback in case external API has temporary high demand spikes
-function generateKnowledgeFallback(query) {
-  const q = query.toLowerCase();
-
+  // 2. Direct Academy Inquiries
   if (q.includes('apply') || q.includes('register') || q.includes('enroll') || q.includes('join') || q.includes('admission') || q.includes('form')) {
     return `To apply for a course at Pencraft Academy:
 1. Click the **"Apply for a Course"** button at the top of any page (or visit our [Contact & Apply](contact.html) page).
 2. Complete the short Google Application Form with your details.
 3. Our team will review your application and contact you with next steps!
 
-*Currently accepting applications for our **Digital Marketing** cohort.* 📝✨`;
+*Currently accepting applications for our **Digital Marketing Mastery** cohort.* 📝✨`;
   }
 
-  if (q.includes('course') || q.includes('teach') || q.includes('offer') || q.includes('program') || q.includes('learn') || q.includes('curriculum') || q.includes('tracks')) {
+  if (q.includes('course') || q.includes('curriculum') || q.includes('track') || q.includes('what do you teach') || q.includes('programs')) {
     return `🎓 **Pencraft Academy Curriculum Programs:**
 
 1. **📱 Digital Marketing Mastery (Active Cohort):**
@@ -113,7 +133,7 @@ Explore all tracks on our [Courses page](courses.html) or click **"Apply for a C
 His vision is to close the gap between individual potential and practical ability by equipping learners with tangible, ethical, and high-value modern skills. You can read more about our founding story on our [About page](about.html). ✍️🌟`;
   }
 
-  if (q.includes('about') || q.includes('what is pencraft') || q.includes('mission') || q.includes('vision') || q.includes('purpose')) {
+  if (q.includes('about') && (q.includes('pencraft') || q.includes('academy'))) {
     return `**Pencraft Academy** is a learning and skills-development initiative dedicated to turning ideas into skills and turning skills into value.
 
 • **Mission:** Provide accessible, practical, and ethical skills education.
@@ -131,17 +151,7 @@ Pencraft Academy awards an official **Certificate of Completion** to every stude
 View details on our [Courses](courses.html#certification) page! 📜✨`;
   }
 
-  if (q.includes('rule') || q.includes('discipline') || q.includes('rights') || q.includes('value')) {
-    return `📜 **Core Values & Community Standards:**
-
-Pencraft Academy operates with strict standards of integrity, respect, and excellence.
-• 9 Core Values including Integrity, Discipline, Respect, and Transparency.
-• Supportive, practical learning environment focused on ethical growth.
-
-Learn more about our standards on the [About Us](about.html) page! ✨`;
-  }
-
-  if (q.includes('contact') || q.includes('whatsapp') || q.includes('phone') || q.includes('call') || q.includes('message') || q.includes('reach') || q.includes('help')) {
+  if (q.includes('contact') || q.includes('whatsapp') || q.includes('phone') || q.includes('reach out')) {
     return `You can reach our team directly:
 • **WhatsApp:** [+234 708 692 2596](https://wa.me/2347086922596) *(Click to chat directly with us on WhatsApp!)*
 • **Application Form:** Click the gold **"Apply for a Course"** button at the top of the page.
@@ -150,61 +160,64 @@ Learn more about our standards on the [About Us](about.html) page! ✨`;
 I am also here 24/7 to answer any questions you have! 😊✨`;
   }
 
-  if (q.includes('hello') || q.includes('hi') || q.includes('hey') || q.includes('good morning') || q.includes('good afternoon')) {
-    return `Hello and welcome to Pencraft Academy! 🎓✨
+  // 3. Greetings
+  if (/^(hi|hello|hey|good day|good morning|good afternoon|good evening|greetings)\b/i.test(q)) {
+    return `Hello! I'm **Penny**, your AI assistant at Pencraft Academy. ✨
 
-I'm **Penny**, your AI guide. How can I help you today? You can ask me about:
-• Applying for our **Digital Marketing** course
-• Our mission and founder
-• Certification levels & curriculum
-• Navigation and general guidance!`;
+I'm here to answer any questions you have—whether you want to learn about science, coding, math, writing, history, digital marketing, or anything under the sun!
+
+What would you like to explore or talk about today? 💡`;
   }
 
+  // 4. Wikipedia Encyclopedia query for factual/informative questions
+  const wikiMatch = clean.match(/^(?:what is|what are|who is|who was|who were|tell me about|explain|define)\s+(?:a\s+|an\s+|the\s+)?([a-zA-Z0-9\s\-]+?)\??$/i);
+  if (wikiMatch) {
+    const topic = wikiMatch[1].trim();
+    try {
+      const res = await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(topic)}`, {
+        signal: AbortSignal.timeout(3000)
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.extract && data.extract.length > 25) {
+          return `📖 **${data.title}**\n\n${data.extract}\n\n*Feel free to ask me to explain further, give examples, or explore another question!* ✨`;
+        }
+      }
+    } catch (e) {}
+  }
+
+  // 5. Digital marketing & career tips
   if (q.includes('seo') || q.includes('search engine')) {
     return `🔍 **What is SEO (Search Engine Optimization)?**
 
-SEO is the practice of optimizing your website and content to rank higher in unpaid (organic) search engine results like Google.
+SEO is the art and science of optimizing content and websites to achieve top ranking on search engines like Google:
+• **Keyword Strategy:** Finding the high-intent terms people search for.
+• **On-Page Optimization:** Engaging titles, structured headers, internal linking, and meta descriptions.
+• **Technical Health:** Fast load times, responsive mobile rendering, and indexable site architecture.
+• **Authority & Backlinks:** Earning mentions and links from reputable platforms.
 
-**Key Pillars of SEO:**
-• **Keyword Research:** Discovering terms your target audience searches for.
-• **On-Page SEO:** Crafting compelling title tags, headings, content, and internal links.
-• **Technical SEO:** Fast page speed, mobile-friendliness, and clean site structure.
-• **Backlinks (Off-Page):** Earning credible links from reputable websites.
-
-Mastering SEO is a core part of our **Digital Marketing** course at Pencraft Academy! 🚀`;
+Need deeper guidance or examples on any of these? Ask away! 🚀`;
   }
 
-  if (q.includes('copywriting') || q.includes('content') || q.includes('write') || q.includes('writing')) {
-    return `✍️ **Effective Copywriting Tips:**
+  if (q.includes('copywriting') || q.includes('content') || q.includes('writing tips')) {
+    return `✍️ **Key Principles of Compelling Copywriting:**
 
-1. **Know Your Audience:** Write directly to one person's desires and pain points.
-2. **Lead with Benefits, Not Just Features:** Don't just say what a product does—show how it transforms the user's life.
-3. **Hook in the First 3 Seconds:** Use bold headlines and curiosity-provoking openers.
-4. **Clear Call-to-Action (CTA):** Tell the reader precisely what to do next (e.g. *"Join today"*, *"Claim your guide"*).
-5. **Edit Ruthlessly:** Cut fluff, simplify complex phrasing, and keep sentences punchy.
+1. **Know Your Reader:** Focus on their desires, fears, and immediate goals.
+2. **Benefits Over Features:** Features inform; benefits convince and convert.
+3. **Strong Hook:** Capture attention in the first sentence or headline.
+4. **Frictionless CTA:** Give clear, low-friction direction on what step to take next.
+5. **Punchy Editing:** Eliminate weak filler words and keep sentences active.
 
-We teach actionable copywriting inside our **Digital Marketing** program! ✨`;
+Tell me what you're writing or working on, and I'd be happy to give you tailored feedback! ✨`;
   }
 
-  if (q.includes('freelance') || q.includes('client') || q.includes('portfolio') || q.includes('money')) {
-    return `💼 **Key Steps to Succeed in Freelancing:**
+  // 6. Universal thoughtful answer for any other question
+  return `I'm happy to help you with that!
 
-1. **Pick One High-Income Skill:** Specialize in an in-demand area (like Digital Marketing, Copywriting, or Web Design).
-2. **Build Proof of Work:** Create 2–3 comprehensive case studies or sample projects even before having your first client.
-3. **Outreach & Networking:** Engage on LinkedIn, Twitter/X, and freelance platforms with personalized, value-first proposals.
-4. **Deliver Exceptional Quality:** Over-deliver on deadlines and maintain proactive communication.
+Regarding **"${clean}"**:
+That's a great question. You can ask me to break it down in detail, give step-by-step instructions, write code or prose, or look at it from different angles.
 
-Pencraft Academy is built on turning skills into tangible market value! 🌟`;
-  }
-
-  return `Hello! I'm **Penny**, your AI assistant. ✨
-
-I can help you with anything you need—from answering questions about **Digital Marketing**, **writing**, **SEO**, and **career skills**, to guiding you through enrolling at Pencraft Academy!
-
-• To apply for our active cohort, click the **"Apply for a Course"** button.
-• To speak with our team, chat with us on WhatsApp at **[+234 708 692 2596](https://wa.me/2347086922596)**.
-
-Feel free to ask me any question! What would you like to know or learn today? 🎓`;
+Could you tell me a little more about what specific angle you'd like to explore, or if you'd like an introductory overview? I'm ready! 💡✨`;
 }
 
 // Store conversation histories (in-memory)
@@ -229,8 +242,8 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
     return res.status(400).json({ error: 'Message is too long. Please keep it under 2000 characters.' });
   }
 
-  // Candidate models: gemini-3.8-flash, gemma-4-31b-it, gemma-4-26b-a4b-it
-  const modelsToTry = ['gemini-3.8-flash', 'gemma-4-31b-it', 'gemma-4-26b-a4b-it'];
+  // Candidate models: ultra-fast Gemini models with IPv4 resolution
+  const modelsToTry = ['gemini-3.5-flash', 'gemini-3.6-flash', 'gemini-3.1-flash-lite', 'gemini-3.8-flash'];
   let reply = null;
 
   if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '') {
@@ -266,7 +279,7 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
           }
         } catch (err) {
           console.warn(`[Penny] ${modelName} attempt ${attempt + 1} notice:`, err.message);
-          if (attempt === 0) await wait(400);
+          if (attempt === 0) await wait(300);
         }
       }
       if (reply) break;
@@ -275,8 +288,8 @@ app.post('/api/chat', chatLimiter, async (req, res) => {
 
   // If external API is unreachable or spiking, seamlessly serve instant intelligent answer
   if (!reply) {
-    console.log('[Penny] Serving intelligent local response for:', cleanMessage);
-    reply = generateKnowledgeFallback(cleanMessage);
+    console.log('[Penny] Serving intelligent universal response for:', cleanMessage);
+    reply = await generateKnowledgeFallback(cleanMessage);
   }
 
   return res.json({ reply });

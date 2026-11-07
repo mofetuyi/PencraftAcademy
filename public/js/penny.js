@@ -89,13 +89,13 @@ document.addEventListener('DOMContentLoaded', () => {
       } else if (data && data.error) {
         appendMessage(data.error, 'bot');
       } else {
-        appendMessage("I'm here to assist you with Pencraft Academy! Could you please repeat that?", 'bot');
+        appendMessage("I'm right here! Could you please repeat or rephrase that for me?", 'bot');
       }
     } catch (error) {
       console.warn('Penny fetch error:', error);
       removeTyping(typingEl);
       appendMessage(
-        "I'm here! You can explore our [Courses](courses.html) or [Apply Directly](https://docs.google.com/forms/d/e/1FAIpQLScDq_i3W1olkoYo17hHQp5rpeZVwmY-eYeSrigO8A860j8cMA/viewform?usp=publish-editor). How else can I help?",
+        "I had a brief connection pause. Please try asking again in a moment—I'm ready to answer any question! ✨",
         'bot'
       );
     }
@@ -125,11 +125,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function formatResponse(text) {
     if (!text) return '';
 
-    let html = text
+    // Extract code blocks first to protect them from inline markdown formatting
+    const codeBlocks = [];
+    let processed = text.replace(/```([a-zA-Z0-9_\-\+]*)\n?([\s\S]*?)```/g, (match, lang, code) => {
+      const idx = codeBlocks.length;
+      const cleanCode = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      codeBlocks.push(`<pre style="background: rgba(10,22,40,0.06); padding: 0.75rem 1rem; border-radius: 6px; overflow-x: auto; font-family: monospace; font-size: 0.85rem; margin: 0.5rem 0; border: 1px solid rgba(10,22,40,0.08);"><code>${cleanCode.trim()}</code></pre>`);
+      return `__CODE_BLOCK_${idx}__`;
+    });
+
+    let html = processed
       // Bold
       .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
       // Italic
       .replace(/\*(.*?)\*/g, '<em>$1</em>')
+      // Inline code
+      .replace(/`([^`\n]+)`/g, '<code style="background: rgba(10,22,40,0.06); padding: 0.15rem 0.35rem; border-radius: 4px; font-family: monospace; font-size: 0.85rem;">$1</code>')
       // Markdown links: [Text](url)
       .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: var(--gold-600); font-weight: 600; text-decoration: underline;">$1</a>')
       // Bullet points
@@ -143,7 +154,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Wrap consecutive list items
     html = html.replace(/((<li>.*?<\/li>\s*)+)/g, '<ul style="margin: 0.5rem 0; padding-left: 1.25rem;">$1</ul>');
 
-    if (!html.startsWith('<p>') && !html.startsWith('<ul>')) {
+    // Restore code blocks
+    codeBlocks.forEach((cb, idx) => {
+      html = html.replace(`__CODE_BLOCK_${idx}__`, cb);
+    });
+
+    if (!html.startsWith('<p>') && !html.startsWith('<ul>') && !html.startsWith('<pre>')) {
       html = `<p>${html}</p>`;
     }
 
